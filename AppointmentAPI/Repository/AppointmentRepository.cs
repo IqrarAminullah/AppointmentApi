@@ -9,37 +9,35 @@ namespace AppointmentAPI.Repository
 {
     public class AppointmentRepository : IAppointmentRepository
     {
-        private AppointmentDbContext _AppointmentDbContext;
+        private AppointmentDbContext _appointmentDbContext;
 
         public AppointmentRepository(AppointmentDbContext appointmentDbContext)
         {
-            _AppointmentDbContext = appointmentDbContext;
+            _appointmentDbContext = appointmentDbContext;
         }
 
-        public async Task<int> AddAppointment(Appointment appointment)
+        public async Task<int> AddAppointment(AppointmentViewModel appointment)
         {
-            if(_AppointmentDbContext != null) {
+            if(_appointmentDbContext != null) {
                 Appointment a = new();
-                a.AppointmentId = appointment.AppointmentId;
                 a.AppointmentTime = appointment.AppointmentTime;
                 a.CustomerId = appointment.CustomerId;
                 a.Token = appointment.Token;
-                await _AppointmentDbContext.AddAsync(a);
-                await _AppointmentDbContext.SaveChangesAsync();
+                await _appointmentDbContext.AddAsync(a);
+                await _appointmentDbContext.SaveChangesAsync();
 
                 return a.AppointmentId;
             }
             return 0;
         }
 
-        public async Task<int> AddCustomer(Customer customer)
+        public async Task<int> AddCustomer(CustomerViewModel customer)
         {
-            if (_AppointmentDbContext != null) {
+            if (_appointmentDbContext != null) {
                 Customer c = new();
-                c.CustomerId = customer.CustomerId;
                 c.CustomerName = customer.CustomerName;
-                await _AppointmentDbContext.AddAsync(c);
-                await _AppointmentDbContext.SaveChangesAsync();
+                await _appointmentDbContext.AddAsync(c);
+                await _appointmentDbContext.SaveChangesAsync();
 
                 return c.CustomerId;
             }
@@ -49,13 +47,13 @@ namespace AppointmentAPI.Repository
         public async Task<int> DeleteAppointment(int appointmentId)
         {
             int result = 0;
-            if (_AppointmentDbContext != null) {
-                Appointment a = await _AppointmentDbContext.Appointments.FirstOrDefaultAsync(x => x.AppointmentId == appointmentId);
+            if (_appointmentDbContext != null) {
+                Appointment a = await _appointmentDbContext.Appointments.FirstOrDefaultAsync(x => x.AppointmentId == appointmentId);
 
                 if (a != null)
                 {
-                    _AppointmentDbContext.Appointments.Remove(a);
-                    result = await _AppointmentDbContext.SaveChangesAsync();
+                    _appointmentDbContext.Appointments.Remove(a);
+                    result = await _appointmentDbContext.SaveChangesAsync();
                 }
             }
             return result;
@@ -64,14 +62,14 @@ namespace AppointmentAPI.Repository
         public async Task<int> DeleteCustomer(int customerId)
         {
             int result = 0;
-            if (_AppointmentDbContext != null)
+            if (_appointmentDbContext != null)
             {
-                Customer c = await _AppointmentDbContext.Customers.FirstOrDefaultAsync(x => x.CustomerId == customerId);
+                Customer c = await _appointmentDbContext.Customers.FirstOrDefaultAsync(x => x.CustomerId == customerId);
 
                 if (c != null)
                 {
-                    _AppointmentDbContext.Customers.Remove(c);
-                    result = await _AppointmentDbContext.SaveChangesAsync();
+                    _appointmentDbContext.Customers.Remove(c);
+                    result = await _appointmentDbContext.SaveChangesAsync();
                 }
             }
             return result;
@@ -79,10 +77,10 @@ namespace AppointmentAPI.Repository
 
         public async Task<List<AppointmentViewModel>> GetAllAppointments()
         {
-            if (_AppointmentDbContext != null)
+            if (_appointmentDbContext != null)
             {
-                return await (from a in _AppointmentDbContext.Appointments
-                              from c in _AppointmentDbContext.Customers
+                return await (from a in _appointmentDbContext.Appointments
+                              from c in _appointmentDbContext.Customers
                               where a.CustomerId == c.CustomerId
                               select new AppointmentViewModel
                               {
@@ -98,9 +96,9 @@ namespace AppointmentAPI.Repository
 
         public async Task<List<CustomerViewModel>> GetAllCustomers()
         {
-            if (_AppointmentDbContext != null)
+            if (_appointmentDbContext != null)
             {
-                return await (from c in _AppointmentDbContext.Customers
+                return await (from c in _appointmentDbContext.Customers
                               select new CustomerViewModel
                               {
                                   CustomerId = c.CustomerId,
@@ -112,10 +110,10 @@ namespace AppointmentAPI.Repository
 
         public async Task<AppointmentViewModel> GetAppointmentById(int appointmentId)
         {
-            if (_AppointmentDbContext != null)
+            if (_appointmentDbContext != null)
             {
-                return await (from a in _AppointmentDbContext.Appointments
-                              from c in _AppointmentDbContext.Customers
+                return await (from a in _appointmentDbContext.Appointments
+                              from c in _appointmentDbContext.Customers
                               where a.AppointmentId == appointmentId
                               where a.AppointmentId == c.CustomerId
                               select new AppointmentViewModel
@@ -132,10 +130,10 @@ namespace AppointmentAPI.Repository
 
         public async Task<List<AppointmentViewModel>> GetCustomerAppointments(int customerId)
         {
-            if (_AppointmentDbContext != null)
+            if (_appointmentDbContext != null)
             {
-                return await (from a in _AppointmentDbContext.Appointments
-                              from c in _AppointmentDbContext.Customers
+                return await (from a in _appointmentDbContext.Appointments
+                              from c in _appointmentDbContext.Customers
                               where c.CustomerId == customerId
                               where a.AppointmentId == c.CustomerId
                               select new AppointmentViewModel
@@ -152,9 +150,9 @@ namespace AppointmentAPI.Repository
 
         public async Task<CustomerViewModel> GetCustomerById(int customerId)
         {
-            if (_AppointmentDbContext != null)
+            if (_appointmentDbContext != null)
             {
-                return await (from c in _AppointmentDbContext.Customers
+                return await (from c in _appointmentDbContext.Customers
                               where c.CustomerId == customerId
                               select new CustomerViewModel
                               {
@@ -165,22 +163,35 @@ namespace AppointmentAPI.Repository
             return null;
         }
 
-        public async Task UpdateAppointment(Appointment appointment)
+        public async Task<int> UpdateAppointment(AppointmentViewModel appointment)
         {
-            if (_AppointmentDbContext != null)
+            if (_appointmentDbContext != null && AppointmentExists(appointment.AppointmentId))
             {
-                _AppointmentDbContext.Update(appointment);
-                await _AppointmentDbContext.SaveChangesAsync();
+                _appointmentDbContext.Update(appointment);
+                await _appointmentDbContext.SaveChangesAsync();
+                return appointment.AppointmentId;
             }
+            return 0;
         }
 
-        public async Task UpdateCustomer(Customer customer)
+        public async Task<int> UpdateCustomer(CustomerViewModel customer)
         {
-            if (_AppointmentDbContext != null)
+            if (_appointmentDbContext != null && CustomerExists(customer.CustomerId))
             {
-                _AppointmentDbContext.Update(customer);
-                await _AppointmentDbContext.SaveChangesAsync();
+                _appointmentDbContext.Update(customer);
+                await _appointmentDbContext.SaveChangesAsync();
+                return customer.CustomerId;
             }
+            return 0;
          }
+
+        private bool AppointmentExists(int id)
+        {
+            return (_appointmentDbContext.Appointments?.Any(e => e.AppointmentId == id)).GetValueOrDefault();
+        }
+        private bool CustomerExists(int id)
+        {
+            return (_appointmentDbContext.Customers?.Any(e => e.CustomerId == id)).GetValueOrDefault();
+        }
     }
 }

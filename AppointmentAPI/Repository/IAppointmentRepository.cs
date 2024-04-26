@@ -10,11 +10,11 @@ namespace AppointmentAPI.Repository
         Task<List<CustomerViewModel>> GetAllCustomers();
         Task<CustomerViewModel>? GetCustomerById(int customerId);
         Task<List<AppointmentViewModel>>? GetCustomerAppointments(int customerId);
-        Task<int> AddAppointment(Appointment appointment);
-        Task UpdateAppointment(Appointment appointment);
+        Task<int> AddAppointment(AppointmentViewModel appointment);
+        Task<int> UpdateAppointment(AppointmentViewModel appointment);
         Task<int> DeleteAppointment(int appointmentId);
-        Task<int> AddCustomer(Customer customer);
-        Task UpdateCustomer(Customer customer);        
+        Task<int> AddCustomer(CustomerViewModel customer);
+        Task<int> UpdateCustomer(CustomerViewModel customer);        
         Task<int> DeleteCustomer(int customerId);  
     }
 }
