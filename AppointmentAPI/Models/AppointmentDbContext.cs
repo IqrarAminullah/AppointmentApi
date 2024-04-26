@@ -19,20 +19,21 @@ public partial class AppointmentDbContext : DbContext
 
     public virtual DbSet<Customer> Customers { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseSqlServer("Server=DESKTOP-MPLB0RV\\MSSQLSERVER01;Database=AppointmentDB;UID=Iqrar;PWD=iqrar;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=True;");
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-MPLB0RV\\MSSQLSERVER01;Database=AppointmentDB;UID=Iqrar;PWD=iqrar;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Appointment>(entity =>
         {
-            entity.HasKey(e => e.AppointmentId).HasName("PK__Appointm__8ECDFCA2C49D0304");
+            entity.HasKey(e => e.AppointmentId).HasName("PK__Appointm__8ECDFCA2FDECB7FE");
 
             entity.ToTable("Appointment");
 
             entity.Property(e => e.AppointmentId).HasColumnName("AppointmentID");
-            entity.Property(e => e.AppointmentTime).HasColumnType("datetime");
+            entity.Property(e => e.AppointmentEnd).HasColumnType("datetime");
+            entity.Property(e => e.AppointmentStart).HasColumnType("datetime");
             entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.Token)
                 .HasMaxLength(255)
@@ -41,7 +42,7 @@ public partial class AppointmentDbContext : DbContext
             entity.HasOne(d => d.Customer).WithMany(p => p.Appointments)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Appointme__Custo__267ABA7A");
+                .HasConstraintName("FK__Appointme__Custo__2B3F6F97");
         });
 
         modelBuilder.Entity<Customer>(entity =>

@@ -60,7 +60,7 @@ namespace AppointmentAPI.Controllers
             {
                 return Problem("Repository not found.");
             }
-            int id = await _repository.AddCustomer(Customer);
+            int id = await _repository.AddCustomer(customer);
             if (id == 0) return Problem("Problem adding Customer");
             customer.CustomerId = id;
 

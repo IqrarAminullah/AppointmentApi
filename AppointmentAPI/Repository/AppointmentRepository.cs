@@ -20,7 +20,8 @@ namespace AppointmentAPI.Repository
         {
             if(_appointmentDbContext != null) {
                 Appointment a = new();
-                a.AppointmentTime = appointment.AppointmentTime;
+                a.AppointmentStart = appointment.AppointmentStart;
+                a.AppointmentEnd = appointment.AppointmentEnd;
                 a.CustomerId = appointment.CustomerId;
                 a.Token = appointment.Token;
                 await _appointmentDbContext.AddAsync(a);
@@ -85,7 +86,8 @@ namespace AppointmentAPI.Repository
                               select new AppointmentViewModel
                               {
                                   AppointmentId = a.AppointmentId,
-                                  AppointmentTime = a.AppointmentTime,
+                                  AppointmentStart = a.AppointmentStart,
+                                  AppointmentEnd = a.AppointmentEnd,
                                   Token = a.Token,
                                   CustomerId = a.CustomerId,
                                   CustomerName = c.CustomerName
@@ -119,7 +121,8 @@ namespace AppointmentAPI.Repository
                               select new AppointmentViewModel
                               {
                                   AppointmentId = a.AppointmentId,
-                                  AppointmentTime = a.AppointmentTime,
+                                  AppointmentStart = a.AppointmentStart,
+                                  AppointmentEnd = a.AppointmentEnd,
                                   Token = a.Token,
                                   CustomerId = a.CustomerId,
                                   CustomerName = c.CustomerName
@@ -139,7 +142,8 @@ namespace AppointmentAPI.Repository
                               select new AppointmentViewModel
                               {
                                   AppointmentId = a.AppointmentId,
-                                  AppointmentTime = a.AppointmentTime,
+                                  AppointmentStart = a.AppointmentStart,
+                                  AppointmentEnd = a.AppointmentEnd,
                                   Token = a.Token,
                                   CustomerId = a.CustomerId,
                                   CustomerName = c.CustomerName

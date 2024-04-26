@@ -8,10 +8,5 @@ namespace AppointmentAPI.ViewModel
         public int CustomerId { get; set; }
 
         public string? CustomerName { get; set; }
-
-        public CustomerViewModel(Customer c) {
-            CustomerId = c.CustomerId;
-            CustomerName = c.CustomerName;
-        }
     }
 }

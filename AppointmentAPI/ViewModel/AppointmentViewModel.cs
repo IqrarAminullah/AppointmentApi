@@ -9,17 +9,10 @@ namespace AppointmentAPI.ViewModel
 
         public int CustomerId { get; set; }
 
-        public DateTime? AppointmentTime { get; set; }
+        public DateTime? AppointmentStart { get; set; }
+        public DateTime? AppointmentEnd { get; set; }
 
         public string? Token { get; set; }
         public string? CustomerName { get; set; }
-
-        public AppointmentViewModel(Appointment a) {
-            AppointmentId = a.AppointmentId;
-            CustomerId = a.CustomerId;
-            AppointmentTime = a.AppointmentTime;
-            Token = a.Token;
-            CustomerName = a.Customer.CustomerName;
-        }
     }
 }
